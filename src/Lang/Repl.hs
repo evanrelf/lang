@@ -3,6 +3,7 @@ module Lang.Repl
   )
 where
 
+import Lang.Evaluator (evaluate)
 import Lang.Lexer (lex)
 import Lang.Parser (parse)
 import System.Console.Repline
@@ -14,10 +15,11 @@ import qualified System.IO as IO
 repl :: MonadIO m => m ()
 repl = liftIO $ evalReplOpts ReplOpts
   { banner = \_ -> pure "lang> "
-  , command = parseCommand
+  , command = evalCommand
   , options =
       [ ("lex", lexCommand)
       , ("parse", parseCommand)
+      , ("eval", evalCommand)
       ]
   , prefix = Just ':'
   , multilineCommand = Nothing
@@ -34,6 +36,11 @@ lexCommand source =
 parseCommand :: String -> HaskelineT IO ()
 parseCommand source = do
   lex (toText source) >>= parse
+  `dischargeError` \expression -> pPrint expression
+
+evalCommand :: String -> HaskelineT IO ()
+evalCommand source =
+  lex (toText source) >>= parse <&> evaluate
   `dischargeError` \expression -> pPrint expression
 
 dischargeError :: MonadIO m => Either Text a -> (a -> m ()) -> m ()

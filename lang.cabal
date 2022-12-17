@@ -48,6 +48,7 @@ library
     , repline
   exposed-modules:
     Lang
+    Lang.Evaluator
     Lang.Expression
     Lang.Lexer
     Lang.Parser
