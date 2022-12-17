@@ -31,5 +31,7 @@ instance Print Expression where
   print = \case
     Expression.Literal literal -> print literal
     Expression.Variable name -> name
+    Expression.Application function argument@(Expression.Application {}) ->
+      print function <> " (" <> print argument <> ")"
     Expression.Application function argument ->
-      "(" <> print function <> " " <> print argument <> ")"
+      print function <> " " <> print argument
