@@ -14,7 +14,7 @@ data Token
   = Identifier Text
   | OpenParen
   | CloseParen
-  deriving stock (Show)
+  deriving stock (Eq, Show)
 
 type Parser = M.Parsec Void Text
 
