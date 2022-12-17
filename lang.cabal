@@ -15,6 +15,7 @@ common common
   default-extensions:
     BlockArguments
     DerivingStrategies
+    FlexibleInstances
     LambdaCase
     OverloadedStrings
   ghc-options:
@@ -52,6 +53,7 @@ library
     Lang.Expression
     Lang.Lexer
     Lang.Parser
+    Lang.Printer
     Lang.Repl
 
 executable template

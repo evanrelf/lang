@@ -6,6 +6,8 @@ where
 import Lang.Evaluator (evaluate)
 import Lang.Lexer (lex)
 import Lang.Parser (parse)
+import Lang.Printer (Print (..))
+import Prelude hiding (print)
 import System.Console.Repline
 import Text.Pretty.Simple (pPrint)
 
@@ -29,24 +31,17 @@ repl = liftIO $ evalReplOpts ReplOpts
   }
 
 lexCommand :: String -> HaskelineT IO ()
-lexCommand source =
-  lex (toText source)
-  `dischargeError` \tokens -> pPrint tokens
+lexCommand source = handle $ lex (toText source)
 
 parseCommand :: String -> HaskelineT IO ()
-parseCommand source = do
-  lex (toText source) >>= parse
-  `dischargeError` \expression -> pPrint expression
+parseCommand source = handle $ lex (toText source) >>= parse
 
 evalCommand :: String -> HaskelineT IO ()
-evalCommand source =
-  lex (toText source) >>= parse <&> evaluate
-  `dischargeError` \expression -> pPrint expression
+evalCommand source = handle $ lex (toText source) >>= parse <&> evaluate
 
-dischargeError :: MonadIO m => Either Text a -> (a -> m ()) -> m ()
-dischargeError e k =
-  case e of
-    Left err -> liftIO $ Text.hPutStrLn IO.stderr err
-    Right x -> k x
-
-infixr 0 `dischargeError`
+handle :: (Print a, Show a) => Either Text a -> HaskelineT IO ()
+handle = \case
+  Left err -> liftIO $ Text.hPutStrLn IO.stderr err
+  Right value -> do
+    putTextLn $ print value
+    pPrint value
