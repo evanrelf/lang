@@ -11,9 +11,9 @@ import qualified Text.Megaparsec.Char as M
 import qualified Text.Megaparsec.Char.Lexer as L
 
 data Token
-  = Identifier Text
-  | Integer Int
+  = Integer Int
   | Floating Float
+  | Identifier Text
   | OpenParen
   | CloseParen
   deriving stock (Eq, Show)
@@ -31,9 +31,9 @@ tokensParser = spaceParser *> M.manyTill tokenParser M.eof
 
 tokenParser :: Parser Token
 tokenParser = asum
-  [ Identifier <$> identifierParser
-  , Floating <$> M.try floatingParser
+  [ Floating <$> M.try floatingParser
   , Integer <$> integerParser
+  , Identifier <$> identifierParser
   , OpenParen <$ symbolParser "("
   , CloseParen <$ symbolParser ")"
   ]
