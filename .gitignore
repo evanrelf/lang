@@ -1,4 +1,5 @@
-dist/
-dist-newstyle/
 result
 result-*
+dist/
+dist-newstyle/
+.history

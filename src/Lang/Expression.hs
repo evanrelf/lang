@@ -6,3 +6,4 @@ where
 data Expression
   = Variable Text
   | Application Expression Expression
+  deriving stock (Show)
