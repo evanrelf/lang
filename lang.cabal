@@ -43,6 +43,7 @@ library
     , megaparsec
   exposed-modules:
     Lang
+    Lang.Expression
     Lang.Lexer
 
 executable template
