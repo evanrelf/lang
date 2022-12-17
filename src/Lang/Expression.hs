@@ -1,9 +1,16 @@
 module Lang.Expression
-  ( Expression (..)
+  ( Literal (..)
+  , Expression (..)
   )
 where
 
+data Literal
+  = Integer Int
+  | Floating Float
+  deriving stock (Show)
+
 data Expression
-  = Variable Text
+  = Literal Literal
+  | Variable Text
   | Application Expression Expression
   deriving stock (Show)

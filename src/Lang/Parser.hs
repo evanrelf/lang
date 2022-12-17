@@ -6,8 +6,8 @@ module Lang.Parser
   )
 where
 
-import Lang.Expression (Expression (..))
-import Lang.Lexer (Token (..))
+import Lang.Expression as Expression (Expression (..), Literal (..))
+import Lang.Lexer as Token (Token (..))
 
 import qualified Text.Earley as E
 
@@ -27,6 +27,11 @@ grammar = mdo
     Identifier name -> Just name
     _ -> Nothing
 
+  literalProd <- rule "literal" $ E.terminal \case
+    Token.Integer int -> Just $ Literal (Expression.Integer int)
+    Token.Floating float -> Just $ Literal (Expression.Floating float)
+    _ -> Nothing
+
   variableProd <- rule "variable" do
     Variable <$> identifierProd
 
@@ -40,6 +45,7 @@ grammar = mdo
     argument <- asum
       [ inParens applicationProd
       , variableProd
+      , literalProd
       ]
 
     pure $ Application function argument
@@ -47,6 +53,7 @@ grammar = mdo
   expressionProd <- rule "expression" $ asum
     [ variableProd
     , applicationProd
+    , literalProd
     , inParens expressionProd
     ]
 
