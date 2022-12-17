@@ -13,6 +13,7 @@ common common
     , relude
   default-language: Haskell2010
   default-extensions:
+    BlockArguments
     OverloadedStrings
   ghc-options:
     -Wall
@@ -38,8 +39,11 @@ common executable
 library
   import: common
   hs-source-dirs: src
+  build-depends:
+    , megaparsec
   exposed-modules:
     Lang
+    Lang.Lexer
 
 executable template
   import:
