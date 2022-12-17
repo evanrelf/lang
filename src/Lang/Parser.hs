@@ -23,13 +23,13 @@ grammar = mdo
 
   let inParens prod = E.token OpenParen *> prod <* E.token CloseParen
 
-  identifierProd <- rule "identifier" $ E.terminal \case
-    Identifier name -> Just name
-    _ -> Nothing
-
   literalProd <- rule "literal" $ E.terminal \case
     Token.Integer int -> Just $ Literal (Expression.Integer int)
     Token.Floating float -> Just $ Literal (Expression.Floating float)
+    _ -> Nothing
+
+  identifierProd <- rule "identifier" $ E.terminal \case
+    Identifier name -> Just name
     _ -> Nothing
 
   variableProd <- rule "variable" do

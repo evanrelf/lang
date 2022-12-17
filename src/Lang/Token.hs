@@ -4,9 +4,9 @@ module Lang.Token
 where
 
 data Token
-  = Identifier Text
-  | Integer Int
+  = Integer Int
   | Floating Float
+  | Identifier Text
   | OpenParen
   | CloseParen
   deriving stock (Eq, Show)

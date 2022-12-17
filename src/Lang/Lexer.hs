@@ -25,9 +25,9 @@ tokensParser = spaceParser *> M.manyTill tokenParser M.eof
 
 tokenParser :: Parser Token
 tokenParser = asum
-  [ Identifier <$> identifierParser
-  , Floating <$> M.try floatingParser
+  [ Floating <$> M.try floatingParser
   , Integer <$> integerParser
+  , Identifier <$> identifierParser
   , OpenParen <$ symbolParser "("
   , CloseParen <$ symbolParser ")"
   ]
