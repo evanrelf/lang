@@ -12,6 +12,8 @@ import qualified Text.Megaparsec.Char.Lexer as L
 
 data Token
   = Identifier Text
+  | Integer Int
+  | Floating Float
   | OpenParen
   | CloseParen
   deriving stock (Eq, Show)
@@ -30,6 +32,8 @@ tokensParser = spaceParser *> M.manyTill tokenParser M.eof
 tokenParser :: Parser Token
 tokenParser = asum
   [ Identifier <$> identifierParser
+  , Floating <$> M.try floatingParser
+  , Integer <$> integerParser
   , OpenParen <$ symbolParser "("
   , CloseParen <$ symbolParser ")"
   ]
@@ -51,6 +55,12 @@ identifierParser = lexemeParser do
       ]
 
   pure (c `Text.cons` cs)
+
+integerParser :: Parser Int
+integerParser = lexemeParser $ L.signed mempty L.decimal
+
+floatingParser :: Parser Float
+floatingParser = lexemeParser $ L.signed mempty L.float
 
 lexemeParser :: Parser a -> Parser a
 lexemeParser = L.lexeme spaceParser
