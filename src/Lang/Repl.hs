@@ -6,6 +6,7 @@ where
 import Lang.Lexer (lex)
 import Lang.Parser (parse)
 import System.Console.Repline
+import Text.Pretty.Simple (pPrint)
 
 import qualified Data.Text.IO as Text
 import qualified System.IO as IO
@@ -28,12 +29,12 @@ repl = liftIO $ evalReplOpts ReplOpts
 lexCommand :: String -> HaskelineT IO ()
 lexCommand source =
   lex (toText source)
-  `dischargeError` \tokens -> print tokens
+  `dischargeError` \tokens -> pPrint tokens
 
 parseCommand :: String -> HaskelineT IO ()
 parseCommand source = do
   lex (toText source) >>= parse
-  `dischargeError` \expression -> print expression
+  `dischargeError` \expression -> pPrint expression
 
 dischargeError :: MonadIO m => Either Text a -> (a -> m ()) -> m ()
 dischargeError e k =
