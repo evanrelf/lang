@@ -13,9 +13,10 @@ class Print a where
 
 instance Print Token where
   print = \case
-    Token.Identifier name -> name
     Token.Integer int -> show int
     Token.Floating float -> show float
+    Token.Identifier name -> name
+    Token.Operator name _occurance -> name
     Token.OpenParen -> "("
     Token.CloseParen -> ")"
 

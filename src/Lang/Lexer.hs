@@ -1,5 +1,6 @@
 module Lang.Lexer
-  ( Token (..)
+  ( Occurrence (..)
+  , Token (..)
   , lex
   )
 where
@@ -10,10 +11,18 @@ import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Megaparsec.Char.Lexer as L
 
+data Occurrence
+  = LooseInfix
+  | TightInfix
+  | Prefix
+  | Suffix
+  deriving stock (Eq, Show)
+
 data Token
   = Integer Int
   | Floating Float
   | Identifier Text
+  | Operator Text Occurrence
   | OpenParen
   | CloseParen
   deriving stock (Eq, Show)
@@ -34,6 +43,7 @@ tokenParser = asum
   [ Floating <$> M.try floatingParser
   , Integer <$> integerParser
   , Identifier <$> identifierParser
+  , uncurry Operator <$> operatorParser
   , OpenParen <$ symbolParser "("
   , CloseParen <$ symbolParser ")"
   ]
@@ -55,6 +65,32 @@ identifierParser = lexemeParser do
       ]
 
   pure (c `Text.cons` cs)
+
+operatorParser :: Parser (Text, Occurrence)
+operatorParser = do
+  preceded <- precededByClosingToken
+
+  name <-
+    -- TODO
+    M.takeWhileP Nothing \char -> or
+      [ char `elem` ("+" :: String)
+      ]
+
+  followed <- followedByOpeningToken
+
+  let occurrence
+        | preceded && followed = TightInfix
+        | preceded = Suffix
+        | followed = Prefix
+        | otherwise = LooseInfix
+
+  pure (name, occurrence)
+
+precededByClosingToken :: Parser Bool
+precededByClosingToken = pure False -- TODO
+
+followedByOpeningToken :: Parser Bool
+followedByOpeningToken = pure False -- TODO
 
 integerParser :: Parser Int
 integerParser = lexemeParser $ L.signed mempty L.decimal
