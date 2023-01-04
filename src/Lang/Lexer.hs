@@ -4,19 +4,13 @@ module Lang.Lexer
   )
 where
 
+import Lang.Token (Token (..))
+
 import qualified Data.Char as Char
 import qualified Data.Text as Text
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Megaparsec.Char.Lexer as L
-
-data Token
-  = Identifier Text
-  | Integer Int
-  | Floating Float
-  | OpenParen
-  | CloseParen
-  deriving stock (Eq, Show)
 
 type Parser = M.Parsec Void Text
 

@@ -55,6 +55,7 @@ library
     Lang.Parser
     Lang.Printer
     Lang.Repl
+    Lang.Token
 
 executable template
   import:

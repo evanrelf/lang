@@ -7,7 +7,7 @@ module Lang.Parser
 where
 
 import Lang.Expression as Expression (Expression (..), Literal (..))
-import Lang.Lexer as Token (Token (..))
+import Lang.Token as Token (Token (..))
 
 import qualified Text.Earley as E
 

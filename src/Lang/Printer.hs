@@ -5,7 +5,7 @@ where
 
 import Lang.Expression as Expression (Expression (..))
 import Lang.Expression as Literal (Literal (..))
-import Lang.Lexer as Token (Token (..))
+import Lang.Token as Token (Token (..))
 import Prelude hiding (print)
 
 class Print a where
