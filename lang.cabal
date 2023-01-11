@@ -64,6 +64,7 @@ library
     Lang.Repl
     Lang.Syntax
     Lang.Token
+    Lang.Value
 
 executable template
   import:

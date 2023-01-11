@@ -6,6 +6,7 @@ module Lang.Printer
   )
 where
 
+import Lang.Value as Value (Value (..))
 import Lang.Literal as Literal (Literal (..))
 import Lang.Syntax as Syntax (Syntax (..))
 import Lang.Token as Token (Token (..))
@@ -42,6 +43,17 @@ instance Print Syntax where
     Syntax.Application function argument@(Syntax.Application {}) ->
       printWithOptions options function <> " (" <> printWithOptions options argument <> ")"
     Syntax.Application function argument ->
+      printWithOptions options function <> " " <> printWithOptions options argument
+
+instance Print Value where
+  printWithOptions options@Options{extraParens} = \case
+    Value.Literal literal -> printWithOptions options literal
+    Value.Variable name -> name
+    Value.Application function argument | extraParens ->
+      "(" <> printWithOptions options function <> " " <> printWithOptions options argument <> ")"
+    Value.Application function argument@(Value.Application {}) ->
+      printWithOptions options function <> " (" <> printWithOptions options argument <> ")"
+    Value.Application function argument ->
       printWithOptions options function <> " " <> printWithOptions options argument
 
 data Options = Options

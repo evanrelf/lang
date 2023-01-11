@@ -5,19 +5,21 @@ where
 
 import Lang.Literal (Literal (..))
 import Lang.Syntax as Syntax (Syntax (..))
+import Lang.Value as Value (Value (..))
 
-evaluate :: Syntax -> Syntax
+evaluate :: Syntax -> Value
 evaluate = \case
-  Literal literal -> Literal literal
-  Variable name -> Variable name
-  Application
-    (Application
-      (Variable "add")
-      (Literal (Integer x)))
-    (Literal (Integer y)) -> Literal (Integer (x + y))
-  Application
-    (Application
-      (Variable "add")
-      (Literal (Floating x)))
-    (Literal (Floating y)) -> Literal (Floating (x + y))
-  syntax -> syntax
+  Syntax.Literal literal -> Value.Literal literal
+  Syntax.Variable name -> Value.Variable name
+  Syntax.Application
+    (Syntax.Application
+      (Syntax.Variable "add")
+      (Syntax.Literal (Integer x)))
+    (Syntax.Literal (Integer y)) -> Value.Literal (Integer (x + y))
+  Syntax.Application
+    (Syntax.Application
+      (Syntax.Variable "add")
+      (Syntax.Literal (Floating x)))
+    (Syntax.Literal (Floating y)) -> Value.Literal (Floating (x + y))
+  Syntax.Application function argument ->
+    Value.Application (evaluate function) (evaluate argument)
