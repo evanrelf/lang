@@ -32,24 +32,19 @@ grammar = mdo
     Identifier name -> Just $ Variable name
     _ -> Nothing
 
+  argumentProd <- rule "argument" $ asum
+    [ inParens applicationProd
+    , variableProd
+    , literalProd
+    , inParens argumentProd
+    ]
+
   applicationProd <- rule "application" do
-    function <- asum
-      [ inParens applicationProd
-      , applicationProd
-      , variableProd
-      ]
-
-    argument <- asum
-      [ inParens applicationProd
-      , variableProd
-      , literalProd
-      ]
-
-    pure $ Application function argument
+    Application <$> expressionProd <*> argumentProd
 
   expressionProd <- rule "expression" $ asum
-    [ variableProd
-    , applicationProd
+    [ applicationProd
+    , variableProd
     , literalProd
     , inParens expressionProd
     ]
