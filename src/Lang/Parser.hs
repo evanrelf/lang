@@ -28,12 +28,9 @@ grammar = mdo
     Token.Floating float -> Just $ Literal (Expression.Floating float)
     _ -> Nothing
 
-  identifierProd <- rule "identifier" $ E.terminal \case
-    Identifier name -> Just name
+  variableProd <- rule "variable" $ E.terminal \case
+    Identifier name -> Just $ Variable name
     _ -> Nothing
-
-  variableProd <- rule "variable" do
-    Variable <$> identifierProd
 
   applicationProd <- rule "application" do
     function <- asum
