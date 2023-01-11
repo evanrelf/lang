@@ -1,5 +1,8 @@
 module Lang.Printer
   ( Print (..)
+  , print
+  , Options (..)
+  , defaultOptions
   )
 where
 
@@ -9,10 +12,13 @@ import Lang.Token as Token (Token (..))
 import Prelude hiding (print)
 
 class Print a where
-  print :: a -> Text
+  printWithOptions :: Options -> a -> Text
+
+print :: Print a => a -> Text
+print = printWithOptions defaultOptions
 
 instance Print Token where
-  print = \case
+  printWithOptions _ = \case
     Token.Identifier name -> name
     Token.Integer int -> show int
     Token.Floating float -> show float
@@ -20,18 +26,30 @@ instance Print Token where
     Token.CloseParen -> ")"
 
 instance Print [Token] where
-  print = unwords . fmap print
+  printWithOptions options = unwords . fmap (printWithOptions options)
 
 instance Print Literal where
-  print = \case
+  printWithOptions _ = \case
     Literal.Integer int -> show int
     Literal.Floating float -> show float
 
 instance Print Expression where
-  print = \case
-    Expression.Literal literal -> print literal
+  printWithOptions options@Options{extraParens} = \case
+    Expression.Literal literal -> printWithOptions options literal
     Expression.Variable name -> name
+    Expression.Application function argument | extraParens ->
+      "(" <> printWithOptions options function <> " " <> printWithOptions options argument <> ")"
     Expression.Application function argument@(Expression.Application {}) ->
-      print function <> " (" <> print argument <> ")"
+      printWithOptions options function <> " (" <> printWithOptions options argument <> ")"
     Expression.Application function argument ->
-      print function <> " " <> print argument
+      printWithOptions options function <> " " <> printWithOptions options argument
+
+data Options = Options
+  { extraParens :: Bool
+  }
+  deriving stock (Show)
+
+defaultOptions :: Options
+defaultOptions = Options
+  { extraParens = False
+  }
