@@ -3,9 +3,9 @@ module Lang.Evaluator
   )
 where
 
-import Lang.Expression (Expression (..), Literal (..))
+import Lang.Syntax (Literal (..), Syntax (..))
 
-evaluate :: Expression -> Expression
+evaluate :: Syntax -> Syntax
 evaluate = \case
   Literal literal -> Literal literal
   Variable name -> Variable name
@@ -19,4 +19,4 @@ evaluate = \case
       (Variable "add")
       (Literal (Floating x)))
     (Literal (Floating y)) -> Literal (Floating (x + y))
-  expression -> expression
+  syntax -> syntax

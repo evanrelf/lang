@@ -6,26 +6,26 @@ module Lang.Parser
   )
 where
 
-import Lang.Expression as Expression (Expression (..), Literal (..))
+import Lang.Syntax as Syntax (Literal (..), Syntax (..))
 import Lang.Token as Token (Token (..))
 
 import qualified Text.Earley as E
 
-parse :: [Token] -> Either Text Expression
+parse :: [Token] -> Either Text Syntax
 parse tokens =
   case E.fullParses (E.parser grammar) tokens of
     ([], report) -> Left $ show report
     (result : _, _) -> Right result
 
-grammar :: E.Grammar r (E.Prod r Text Token Expression)
+grammar :: E.Grammar r (E.Prod r Text Token Syntax)
 grammar = mdo
   let rule name prod = E.rule (prod E.<?> name)
 
   let inParens prod = E.token OpenParen *> prod <* E.token CloseParen
 
   literalProd <- rule "literal" $ E.terminal \case
-    Token.Integer int -> Just $ Literal (Expression.Integer int)
-    Token.Floating float -> Just $ Literal (Expression.Floating float)
+    Token.Integer int -> Just $ Literal (Syntax.Integer int)
+    Token.Floating float -> Just $ Literal (Syntax.Floating float)
     _ -> Nothing
 
   variableProd <- rule "variable" $ E.terminal \case

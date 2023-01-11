@@ -6,8 +6,8 @@ module Lang.Printer
   )
 where
 
-import Lang.Expression as Expression (Expression (..))
-import Lang.Expression as Literal (Literal (..))
+import Lang.Syntax as Literal (Literal (..))
+import Lang.Syntax as Syntax (Syntax (..))
 import Lang.Token as Token (Token (..))
 import Prelude hiding (print)
 
@@ -33,15 +33,15 @@ instance Print Literal where
     Literal.Integer int -> show int
     Literal.Floating float -> show float
 
-instance Print Expression where
+instance Print Syntax where
   printWithOptions options@Options{extraParens} = \case
-    Expression.Literal literal -> printWithOptions options literal
-    Expression.Variable name -> name
-    Expression.Application function argument | extraParens ->
+    Syntax.Literal literal -> printWithOptions options literal
+    Syntax.Variable name -> name
+    Syntax.Application function argument | extraParens ->
       "(" <> printWithOptions options function <> " " <> printWithOptions options argument <> ")"
-    Expression.Application function argument@(Expression.Application {}) ->
+    Syntax.Application function argument@(Syntax.Application {}) ->
       printWithOptions options function <> " (" <> printWithOptions options argument <> ")"
-    Expression.Application function argument ->
+    Syntax.Application function argument ->
       printWithOptions options function <> " " <> printWithOptions options argument
 
 data Options = Options

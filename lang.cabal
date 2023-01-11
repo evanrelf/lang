@@ -57,11 +57,11 @@ library
   exposed-modules:
     Lang
     Lang.Evaluator
-    Lang.Expression
     Lang.Lexer
     Lang.Parser
     Lang.Printer
     Lang.Repl
+    Lang.Syntax
     Lang.Token
 
 executable template
