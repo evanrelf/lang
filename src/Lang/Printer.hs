@@ -6,7 +6,7 @@ module Lang.Printer
   )
 where
 
-import Lang.Syntax as Literal (Literal (..))
+import Lang.Literal as Literal (Literal (..))
 import Lang.Syntax as Syntax (Syntax (..))
 import Lang.Token as Token (Token (..))
 import Prelude hiding (print)

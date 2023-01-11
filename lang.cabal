@@ -58,6 +58,7 @@ library
     Lang
     Lang.Evaluator
     Lang.Lexer
+    Lang.Literal
     Lang.Parser
     Lang.Printer
     Lang.Repl

@@ -6,7 +6,8 @@ module Lang.Parser
   )
 where
 
-import Lang.Syntax as Syntax (Literal (..), Syntax (..))
+import Lang.Literal as Literal (Literal (..))
+import Lang.Syntax (Syntax (..))
 import Lang.Token as Token (Token (..))
 
 import qualified Text.Earley as E
@@ -24,8 +25,8 @@ grammar = mdo
   let inParens prod = E.token OpenParen *> prod <* E.token CloseParen
 
   literalProd <- rule "literal" $ E.terminal \case
-    Token.Integer int -> Just $ Literal (Syntax.Integer int)
-    Token.Floating float -> Just $ Literal (Syntax.Floating float)
+    Token.Integer int -> Just $ Literal (Literal.Integer int)
+    Token.Floating float -> Just $ Literal (Literal.Floating float)
     _ -> Nothing
 
   variableProd <- rule "variable" $ E.terminal \case

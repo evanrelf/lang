@@ -3,7 +3,8 @@ module Lang.Evaluator
   )
 where
 
-import Lang.Syntax (Literal (..), Syntax (..))
+import Lang.Literal (Literal (..))
+import Lang.Syntax as Syntax (Syntax (..))
 
 evaluate :: Syntax -> Syntax
 evaluate = \case
