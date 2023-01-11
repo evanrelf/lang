@@ -14,6 +14,7 @@ import Prelude hiding (print)
 import System.Console.Repline hiding (Options)
 import Text.Pretty.Simple (pPrint)
 
+import qualified Data.String as String
 import qualified Data.Text.IO as Text
 import qualified Lang.Printer as Printer
 import qualified System.IO as IO
@@ -32,6 +33,7 @@ replWithOptions options = liftIO do
         [ ("lex", lexCommand optionsIORef)
         , ("parse", parseCommand optionsIORef)
         , ("eval", evalCommand optionsIORef)
+        , ("set", setCommand optionsIORef)
         ]
     , prefix = Just ':'
     , multilineCommand = Nothing
@@ -64,6 +66,16 @@ handle optionsIORef result = do
     Right value -> do
       putTextLn $ printWithOptions printer value
       pPrint value
+
+setCommand :: IORef Options -> String -> HaskelineT IO ()
+setCommand optionsIORef arguments = do
+  case String.words arguments of
+    ["printer.extraParens", readMaybe @Bool -> Just value] ->
+      modifyIORef' optionsIORef \options -> options
+        { printer = (printer options)
+            { Printer.extraParens = value }
+        }
+    _ -> liftIO $ Text.hPutStrLn IO.stderr "Invalid option or argument(s)"
 
 data Options = Options
   { printer :: Printer.Options

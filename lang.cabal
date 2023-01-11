@@ -19,6 +19,8 @@ common common
     LambdaCase
     NamedFieldPuns
     OverloadedStrings
+    TypeApplications
+    ViewPatterns
   ghc-options:
     -Wall
     -Wcompat
