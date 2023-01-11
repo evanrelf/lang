@@ -44,25 +44,30 @@ replWithOptions options = liftIO do
     }
 
 lexCommand :: IORef Options -> String -> HaskelineT IO ()
-lexCommand optionsIORef source = handle optionsIORef $
-  lex (toText source)
+lexCommand optionsIORef source = do
+  Options{printer} <- readIORef optionsIORef
+
+  case lex (toText source) of
+    Left err -> liftIO $ Text.hPutStrLn IO.stderr err
+    Right value -> do
+      putTextLn $ printWithOptions printer value
+      pPrint value
 
 parseCommand :: IORef Options -> String -> HaskelineT IO ()
-parseCommand optionsIORef source = handle optionsIORef $
-  lex (toText source) >>= parse
+parseCommand optionsIORef source = do
+  Options{printer} <- readIORef optionsIORef
+
+  case lex (toText source) >>= parse of
+    Left err -> liftIO $ Text.hPutStrLn IO.stderr err
+    Right value -> do
+      putTextLn $ printWithOptions printer value
+      pPrint value
 
 evalCommand :: IORef Options -> String -> HaskelineT IO ()
-evalCommand optionsIORef source = handle optionsIORef $
-  lex (toText source) >>= parse <&> evaluate
-
-handle
-  :: (Print a, Show a)
-  => IORef Options
-  -> Either Text a
-  -> HaskelineT IO ()
-handle optionsIORef result = do
+evalCommand optionsIORef source = do
   Options{printer} <- readIORef optionsIORef
-  case result of
+
+  case lex (toText source) >>= parse <&> evaluate of
     Left err -> liftIO $ Text.hPutStrLn IO.stderr err
     Right value -> do
       putTextLn $ printWithOptions printer value
