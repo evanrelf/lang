@@ -47,7 +47,7 @@ instance Print Expression where
 data Options = Options
   { extraParens :: Bool
   }
-  deriving stock (Show)
+  deriving stock (Generic, Show)
 
 defaultOptions :: Options
 defaultOptions = Options

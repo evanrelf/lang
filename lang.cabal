@@ -14,10 +14,12 @@ common common
   default-language: Haskell2010
   default-extensions:
     BlockArguments
+    DeriveGeneric
     DerivingStrategies
     FlexibleInstances
     LambdaCase
     NamedFieldPuns
+    OverloadedLabels
     OverloadedStrings
     TypeApplications
     ViewPatterns
@@ -48,6 +50,7 @@ library
   build-depends:
     , Earley
     , megaparsec
+    , optics
     , pretty-simple
     , repline
   exposed-modules:

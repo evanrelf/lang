@@ -10,6 +10,7 @@ import Lang.Evaluator (evaluate)
 import Lang.Lexer (lex)
 import Lang.Parser (parse)
 import Lang.Printer (Print (..))
+import Optics ((%), set)
 import Prelude hiding (print)
 import System.Console.Repline hiding (Options)
 import Text.Pretty.Simple (pPrint)
@@ -71,16 +72,13 @@ setCommand :: IORef Options -> String -> HaskelineT IO ()
 setCommand optionsIORef arguments = do
   case String.words arguments of
     ["printer.extraParens", readMaybe @Bool -> Just value] ->
-      modifyIORef' optionsIORef \options -> options
-        { printer = (printer options)
-            { Printer.extraParens = value }
-        }
+      modifyIORef' optionsIORef $ set (#printer % #extraParens) value
     _ -> liftIO $ Text.hPutStrLn IO.stderr "Invalid option or argument(s)"
 
 data Options = Options
   { printer :: Printer.Options
   }
-  deriving stock (Show)
+  deriving stock (Generic, Show)
 
 defaultOptions :: Options
 defaultOptions = Options
