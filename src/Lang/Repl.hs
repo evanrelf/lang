@@ -69,9 +69,7 @@ evalCommand optionsIORef source = do
 
   case lex (toText source) >>= parse <&> evaluate of
     Left err -> liftIO $ Text.hPutStrLn IO.stderr err
-    Right value -> do
-      putTextLn $ printWithOptions printer value
-      pPrint value
+    Right value -> putTextLn $ printWithOptions printer value
 
 setCommand :: IORef Options -> String -> HaskelineT IO ()
 setCommand optionsIORef arguments = do
