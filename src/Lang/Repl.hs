@@ -10,12 +10,13 @@ import Lang.Evaluator (evaluate)
 import Lang.Lexer (lex)
 import Lang.Parser (parse)
 import Lang.Printer (Print (..))
-import Optics ((%), set)
+import Optics
 import Prelude hiding (print)
 import System.Console.Repline hiding (Options)
 import Text.Pretty.Simple (pPrint)
 
 import qualified Data.String as String
+import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
 import qualified Lang.Printer as Printer
 import qualified System.IO as IO
@@ -35,6 +36,7 @@ replWithOptions options = liftIO do
         , ("parse", parseCommand optionsIORef)
         , ("eval", evalCommand optionsIORef)
         , ("set", setCommand optionsIORef)
+        , ("help", helpCommand optionsIORef)
         ]
     , prefix = Just ':'
     , multilineCommand = Nothing
@@ -77,6 +79,34 @@ setCommand optionsIORef arguments = do
     ["printer.extraParens", readMaybe @Bool -> Just value] ->
       modifyIORef' optionsIORef $ set (#printer % #extraParens) value
     _ -> liftIO $ Text.hPutStrLn IO.stderr "Invalid option or argument(s)"
+
+helpCommand :: IORef Options -> String -> HaskelineT IO ()
+helpCommand optionsIORef arguments = do
+  options <- readIORef optionsIORef
+
+  let optionHelp :: (Is k A_Getter, Show a) => Optic' k is Options a -> Text
+      optionHelp getter = Text.intercalate ", "
+        [ "Default: " <> show (view getter defaultOptions)
+        , "Current: " <> show (view getter options)
+        ]
+
+  case String.words arguments of
+    [] -> do
+      putTextLn $ unlines
+        [ "Commands:"
+        , "  <expr>                    Evaluate expression"
+        , "  :lex <expr>               Lex into tokens"
+        , "  :parse <expr>             Parse into expression"
+        , "  :eval <expr>              Evaluate expression"
+        , "  :help                     Print help text"
+        , "  :set <option> <value>     Change options"
+        , ""
+        , "Options:"
+        , "  printer.extraParens       Include more parens when printing"
+        , "    " <> optionHelp (#printer % #extraParens)
+        ]
+
+    _ -> liftIO $ Text.hPutStrLn IO.stderr "Invalid argument(s)"
 
 data Options = Options
   { printer :: Printer.Options
