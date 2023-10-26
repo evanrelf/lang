@@ -61,7 +61,7 @@ library
     Lang.Token
     Lang.Value
 
-executable template
+executable lang
   import:
     , common
     , executable
