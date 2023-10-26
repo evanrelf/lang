@@ -4,13 +4,12 @@ module Lang.Lexer
   )
 where
 
+import Data.Char qualified as Char
+import Data.Text qualified as Text
 import Lang.Token (Token (..))
-
-import qualified Data.Char as Char
-import qualified Data.Text as Text
-import qualified Text.Megaparsec as M
-import qualified Text.Megaparsec.Char as M
-import qualified Text.Megaparsec.Char.Lexer as L
+import Text.Megaparsec qualified as M
+import Text.Megaparsec.Char qualified as M
+import Text.Megaparsec.Char.Lexer qualified as L
 
 type Parser = M.Parsec Void Text
 

@@ -1,6 +1,6 @@
 module Main (main) where
 
-import qualified Lang
+import Lang qualified
 
 main :: IO ()
 main = Lang.main

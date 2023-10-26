@@ -9,8 +9,7 @@ where
 import Lang.Literal as Literal (Literal (..))
 import Lang.Syntax (Syntax (..))
 import Lang.Token as Token (Token (..))
-
-import qualified Text.Earley as E
+import Text.Earley qualified as E
 
 parse :: [Token] -> Either Text Syntax
 parse tokens =

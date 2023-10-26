@@ -11,18 +11,13 @@ common common
     , base hiding (Prelude)
     , relude (Relude as Prelude)
     , relude
-  default-language: Haskell2010
+  default-language: GHC2021
   default-extensions:
     BlockArguments
-    DeriveGeneric
     DerivingStrategies
-    FlexibleContexts
-    FlexibleInstances
     LambdaCase
-    NamedFieldPuns
     OverloadedLabels
     OverloadedStrings
-    TypeApplications
     ViewPatterns
   ghc-options:
     -Wall

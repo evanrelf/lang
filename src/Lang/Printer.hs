@@ -6,10 +6,10 @@ module Lang.Printer
   )
 where
 
-import Lang.Value as Value (Value (..))
 import Lang.Literal as Literal (Literal (..))
 import Lang.Syntax as Syntax (Syntax (..))
 import Lang.Token as Token (Token (..))
+import Lang.Value as Value (Value (..))
 import Prelude hiding (print)
 
 class Print a where

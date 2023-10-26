@@ -6,20 +6,19 @@ module Lang.Repl
   )
 where
 
+import Data.String qualified as String
+import Data.Text qualified as Text
+import Data.Text.IO qualified as Text
 import Lang.Evaluator (evaluate)
 import Lang.Lexer (lex)
 import Lang.Parser (parse)
 import Lang.Printer (Print (..))
+import Lang.Printer qualified as Printer
 import Optics
 import Prelude hiding (print)
 import System.Console.Repline hiding (Options)
+import System.IO qualified as IO
 import Text.Pretty.Simple (pPrint)
-
-import qualified Data.String as String
-import qualified Data.Text as Text
-import qualified Data.Text.IO as Text
-import qualified Lang.Printer as Printer
-import qualified System.IO as IO
 
 repl :: MonadIO m => m ()
 repl = replWithOptions defaultOptions
