@@ -28,22 +28,39 @@ grammar = mdo
     Token.Floating float -> Just $ Literal (Literal.Floating float)
     _ -> Nothing
 
-  variableProd <- rule "variable" $ E.terminal \case
-    Identifier name -> Just $ Variable name
+  identifierProd <- rule "identifier" $ E.terminal \case
+    Identifier name -> Just name
     _ -> Nothing
 
-  argumentProd <- rule "argument" $ asum
-    [ inParens applicationProd
+  variableProd <- rule "variable" do
+    Variable <$> identifierProd
+
+  lambdaProd <- rule "lambda" do
+    Lambda <$> (identifierProd <* E.token Colon) <*> expressionProd
+
+  functionProd <- rule "application_function" $ asum
+    [ inParens lambdaProd
+    , inParens applicationProd
+    , applicationProd
+    , variableProd
+    , literalProd
+    , inParens argumentProd
+    ]
+
+  argumentProd <- rule "application_argument" $ asum
+    [ inParens lambdaProd
+    , inParens applicationProd
     , variableProd
     , literalProd
     , inParens argumentProd
     ]
 
   applicationProd <- rule "application" do
-    Application <$> expressionProd <*> argumentProd
+    Application <$> functionProd <*> argumentProd
 
   expressionProd <- rule "expression" $ asum
-    [ applicationProd
+    [ lambdaProd
+    , applicationProd
     , variableProd
     , literalProd
     , inParens expressionProd

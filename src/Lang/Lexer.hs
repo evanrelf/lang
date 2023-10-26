@@ -29,6 +29,7 @@ tokenParser = asum
   , Identifier <$> identifierParser
   , OpenParen <$ symbolParser "("
   , CloseParen <$ symbolParser ")"
+  , Colon <$ symbolParser ":"
   ]
 
 identifierParser :: Parser Text

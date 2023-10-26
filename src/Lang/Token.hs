@@ -9,4 +9,5 @@ data Token
   | Identifier Text
   | OpenParen
   | CloseParen
+  | Colon
   deriving stock (Eq, Show)
