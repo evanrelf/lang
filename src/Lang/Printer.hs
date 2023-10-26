@@ -38,23 +38,31 @@ instance Print Syntax where
   printWithOptions options@Options{extraParens} = \case
     Syntax.Literal literal -> printWithOptions options literal
     Syntax.Variable name -> name
-    Syntax.Application function argument | extraParens ->
-      "(" <> printWithOptions options function <> " " <> printWithOptions options argument <> ")"
-    Syntax.Application function argument@(Syntax.Application {}) ->
-      printWithOptions options function <> " (" <> printWithOptions options argument <> ")"
-    Syntax.Application function argument ->
-      printWithOptions options function <> " " <> printWithOptions options argument
+    Syntax.Application function argument -> do
+      let f = printWithOptions options function
+      let x = printWithOptions options argument
+      case argument of
+        _ | extraParens ->
+          "(" <> f <> " " <> x <> ")"
+        Syntax.Application {} ->
+          f <> " (" <> x <> ")"
+        _ ->
+          f <> " " <> x
 
 instance Print Value where
   printWithOptions options@Options{extraParens} = \case
     Value.Literal literal -> printWithOptions options literal
     Value.Variable name -> name
-    Value.Application function argument | extraParens ->
-      "(" <> printWithOptions options function <> " " <> printWithOptions options argument <> ")"
-    Value.Application function argument@(Value.Application {}) ->
-      printWithOptions options function <> " (" <> printWithOptions options argument <> ")"
-    Value.Application function argument ->
-      printWithOptions options function <> " " <> printWithOptions options argument
+    Value.Application function argument -> do
+      let f = printWithOptions options function
+      let x = printWithOptions options argument
+      case argument of
+        _ | extraParens ->
+          "(" <> f <> " " <> x <> ")"
+        Value.Application {} ->
+          f <> " (" <> x <> ")"
+        _ ->
+          f <> " " <> x
 
 data Options = Options
   { extraParens :: Bool
