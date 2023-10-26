@@ -4,6 +4,6 @@ module Lang.Literal
 where
 
 data Literal
-  = Integer Int
-  | Floating Float
+  = Integer Integer
+  | Floating Double
   deriving stock (Show)

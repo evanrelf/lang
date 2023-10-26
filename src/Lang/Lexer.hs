@@ -50,10 +50,10 @@ identifierParser = lexemeParser do
 
   pure (c `Text.cons` cs)
 
-integerParser :: Parser Int
+integerParser :: Parser Integer
 integerParser = lexemeParser $ L.signed mempty L.decimal
 
-floatingParser :: Parser Float
+floatingParser :: Parser Double
 floatingParser = lexemeParser $ L.signed mempty L.float
 
 lexemeParser :: Parser a -> Parser a

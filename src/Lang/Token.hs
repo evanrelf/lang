@@ -4,8 +4,8 @@ module Lang.Token
 where
 
 data Token
-  = Integer Int
-  | Floating Float
+  = Integer Integer
+  | Floating Double
   | Identifier Text
   | OpenParen
   | CloseParen
