@@ -24,12 +24,7 @@ eval scope = \case
 
 apply :: Map Text Syntax -> Syntax -> Syntax -> Value
 apply scope = \cases
-  -- Identity function
-  (Syntax.Lambda param (Syntax.Variable var)) arg | param == var -> eval scope arg
-
-  -- Const function
-  (Syntax.Lambda param (Syntax.Lambda _ (Syntax.Variable var))) arg
-    | param == var -> eval scope arg
+  (Syntax.Lambda param body) arg -> eval (Map.insert param arg scope) body
 
   -- Add integers
   (Syntax.Application (Syntax.Variable "add") (Syntax.Literal (Integer x)))
