@@ -19,6 +19,9 @@ apply = \cases
   -- Identity function
   (Value.Lambda param (Value.Variable var)) arg | param == var -> arg
 
+  -- Const function
+  (Value.Lambda param (Value.Lambda _ (Value.Variable var))) arg | param == var -> arg
+
   -- Add integers
   (Value.Application (Value.Variable "add") (Value.Literal (Integer x)))
     (Value.Literal (Integer y)) -> Value.Literal (Integer (x + y))
