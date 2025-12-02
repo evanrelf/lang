@@ -46,7 +46,9 @@ replWithOptions options = liftIO do
     , finaliser = pure Exit
     }
 
-lexCommand :: IORef Options -> String -> HaskelineT IO ()
+type Repl = HaskelineT IO
+
+lexCommand :: IORef Options -> String -> Repl ()
 lexCommand optionsIORef source = do
   Options{printer} <- readIORef optionsIORef
 
@@ -56,7 +58,7 @@ lexCommand optionsIORef source = do
       putTextLn $ printWithOptions printer value
       pPrint value
 
-parseCommand :: IORef Options -> String -> HaskelineT IO ()
+parseCommand :: IORef Options -> String -> Repl ()
 parseCommand optionsIORef source = do
   Options{printer} <- readIORef optionsIORef
 
@@ -66,7 +68,7 @@ parseCommand optionsIORef source = do
       putTextLn $ printWithOptions printer value
       pPrint value
 
-evalCommand :: IORef Options -> String -> HaskelineT IO ()
+evalCommand :: IORef Options -> String -> Repl ()
 evalCommand optionsIORef source = do
   Options{printer} <- readIORef optionsIORef
 
@@ -74,14 +76,14 @@ evalCommand optionsIORef source = do
     Left err -> liftIO $ Text.hPutStrLn IO.stderr err
     Right value -> putTextLn $ printWithOptions printer value
 
-setCommand :: IORef Options -> String -> HaskelineT IO ()
+setCommand :: IORef Options -> String -> Repl ()
 setCommand optionsIORef arguments = do
   case String.words arguments of
     ["printer.extraParens", readMaybe @Bool -> Just value] ->
       modifyIORef' optionsIORef $ set (#printer % #extraParens) value
     _ -> liftIO $ Text.hPutStrLn IO.stderr "Invalid option or argument(s)"
 
-helpCommand :: IORef Options -> String -> HaskelineT IO ()
+helpCommand :: IORef Options -> String -> Repl ()
 helpCommand optionsIORef arguments = do
   options <- readIORef optionsIORef
 
