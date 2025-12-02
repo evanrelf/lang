@@ -107,6 +107,10 @@ prelude = Map.fromList
   , ("div", Value.Variable "builtin/div")
   , ("True", Value.Literal (Boolean True))
   , ("False", Value.Literal (Boolean False))
+  -- TODO: Figure out recursion
+  -- , ("ycombinator", expr "f: (x: f (x x)) (x: f (x x))")
+  -- , ("factorial", expr "n: if (eq n 0) 1 (mul n (factorial (sub n 1)))")
+  -- , ("factorial", expr "ycombinator (f: n: if (eq n 0) 1 (mul n (f (sub n 1))))")
   ]
   where
   expr :: Text -> Value
