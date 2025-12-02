@@ -12,22 +12,23 @@ eval = \case
   Syntax.Literal literal -> Value.Literal literal
   Syntax.Variable name -> Value.Variable name
   Syntax.Lambda parameter body -> Value.Lambda parameter (eval body)
-  Syntax.Application function argument -> apply (eval function) (eval argument)
+  Syntax.Application function argument -> apply function argument
 
-apply :: Value -> Value -> Value
+apply :: Syntax -> Syntax -> Value
 apply = \cases
   -- Identity function
-  (Value.Lambda param (Value.Variable var)) arg | param == var -> arg
+  (Syntax.Lambda param (Syntax.Variable var)) arg | param == var -> eval arg
 
   -- Const function
-  (Value.Lambda param (Value.Lambda _ (Value.Variable var))) arg | param == var -> arg
+  (Syntax.Lambda param (Syntax.Lambda _ (Syntax.Variable var))) arg
+    | param == var -> eval arg
 
   -- Add integers
-  (Value.Application (Value.Variable "add") (Value.Literal (Integer x)))
-    (Value.Literal (Integer y)) -> Value.Literal (Integer (x + y))
+  (Syntax.Application (Syntax.Variable "add") (Syntax.Literal (Integer x)))
+    (Syntax.Literal (Integer y)) -> Value.Literal (Integer (x + y))
 
   -- Add floats
-  (Value.Application (Value.Variable "add") (Value.Literal (Floating x)))
-    (Value.Literal (Floating y)) -> Value.Literal (Floating (x + y))
+  (Syntax.Application (Syntax.Variable "add") (Syntax.Literal (Floating x)))
+    (Syntax.Literal (Floating y)) -> Value.Literal (Floating (x + y))
 
-  fn arg -> Value.Application fn arg
+  fn arg -> Value.Application (eval fn) (eval arg)
