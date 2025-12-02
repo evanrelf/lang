@@ -6,11 +6,10 @@ module Ecru.Repl
   )
 where
 
-import Data.Map.Strict qualified as Map
 import Data.String qualified as String
 import Data.Text qualified as Text
 import Data.Text.IO qualified as Text
-import Ecru.Eval (eval)
+import Ecru.Eval (eval, prelude)
 import Ecru.Lex (lex)
 import Ecru.Parse (parse)
 import Ecru.Print (Print (..))
@@ -73,7 +72,7 @@ evalCommand :: IORef Options -> String -> Repl ()
 evalCommand optionsIORef source = do
   Options{printer} <- readIORef optionsIORef
 
-  case lex (toText source) >>= parse <&> eval Map.empty of
+  case lex (toText source) >>= parse <&> eval prelude of
     Left err -> liftIO $ Text.hPutStrLn IO.stderr err
     Right value -> putTextLn $ printWithOptions printer value
 

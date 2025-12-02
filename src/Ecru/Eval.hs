@@ -1,10 +1,14 @@
+{-# LANGUAGE QuasiQuotes #-}
+
 module Ecru.Eval
   ( eval
+  , prelude
   )
 where
 
 import Data.Map.Strict qualified as Map
 import Ecru.Literal (Literal (..))
+import Ecru.QuasiQuoters (parsed)
 import Ecru.Syntax as Syntax (Syntax (..))
 import Ecru.Value as Value (Value (..))
 
@@ -33,3 +37,9 @@ apply scope = \cases
     (Syntax.Literal (Floating y)) -> Value.Literal (Floating (x + y))
 
   fn arg -> Value.Application (eval scope fn) (eval scope arg)
+
+prelude :: Map Text Syntax
+prelude = Map.fromList
+  [ ("identity", [parsed|x: x|])
+  , ("const", [parsed|x: _: x|])
+  ]
