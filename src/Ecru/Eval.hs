@@ -29,13 +29,16 @@ apply = \cases
   (Value.Lambda scope param body) arg ->
     eval (Map.insert param arg scope) body
 
-  -- Add integers
-  (Value.Application (Value.Variable "add") (Value.Literal (Integer x)))
-    (Value.Literal (Integer y)) -> Right $ Value.Literal (Integer (x + y))
-
-  -- Add floats
-  (Value.Application (Value.Variable "add") (Value.Literal (Floating x)))
-    (Value.Literal (Floating y)) -> Right $ Value.Literal (Floating (x + y))
+  (Value.Application (Value.Variable "add") x) y ->
+    case (x, y) of
+      (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
+        Right $ Value.Literal (Integer (x' + y'))
+      (Value.Literal (Floating x'), Value.Literal (Floating y')) ->
+        Right $ Value.Literal (Floating (x' + y'))
+      (Value.Literal _, Value.Literal _) ->
+        Left "error: arguments to `add` not the same type"
+      (_, _) ->
+        Left "error: arguments to `add` not valid"
 
   fn arg -> Right $ Value.Application fn arg
 
