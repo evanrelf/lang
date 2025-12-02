@@ -1,5 +1,3 @@
-{-# LANGUAGE QuasiQuotes #-}
-
 module Ecru.Eval
   ( eval
   , prelude
@@ -8,7 +6,6 @@ where
 
 import Data.Map.Strict qualified as Map
 import Ecru.Literal (Literal (..))
-import Ecru.QuasiQuoters (parsed)
 import Ecru.Syntax as Syntax (Syntax (..))
 import Ecru.Value as Value (Value (..))
 

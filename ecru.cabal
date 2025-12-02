@@ -55,7 +55,6 @@ library
     , Ecru.Literal
     , Ecru.Parse
     , Ecru.Print
-    , Ecru.QuasiQuoters
     , Ecru.Repl
     , Ecru.Syntax
     , Ecru.Token
