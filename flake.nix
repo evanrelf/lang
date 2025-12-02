@@ -1,5 +1,5 @@
 {
-  description = "lang";
+  description = "ecru";
 
   inputs = {
     flake-parts = {
@@ -28,16 +28,16 @@
           };
 
         packages = {
-          default = config.packages.lang;
+          default = config.packages.ecru;
 
-          lang =
+          ecru =
             pkgs.haskell.lib.justStaticExecutables
-              (pkgs.haskellPackages.callCabal2nix "lang" ./. { });
+              (pkgs.haskellPackages.callCabal2nix "ecru" ./. { });
         };
 
         devShells.default =
           pkgs.mkShell {
-            inputsFrom = [ config.packages.lang.env ];
+            inputsFrom = [ config.packages.ecru.env ];
             packages = [
               pkgs.cabal-install
               pkgs.ghciwatch-compat-ghcid

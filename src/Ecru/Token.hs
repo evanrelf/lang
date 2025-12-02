@@ -1,4 +1,4 @@
-module Lang.Token
+module Ecru.Token
   ( Token (..)
   )
 where

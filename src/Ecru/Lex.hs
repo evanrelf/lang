@@ -1,4 +1,4 @@
-module Lang.Lex
+module Ecru.Lex
   ( Token (..)
   , lex
   )
@@ -6,7 +6,7 @@ where
 
 import Data.Char qualified as Char
 import Data.Text qualified as Text
-import Lang.Token (Token (..))
+import Ecru.Token (Token (..))
 import Text.Megaparsec qualified as M
 import Text.Megaparsec.Char qualified as M
 import Text.Megaparsec.Char.Lexer qualified as L

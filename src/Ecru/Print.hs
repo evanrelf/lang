@@ -1,4 +1,4 @@
-module Lang.Print
+module Ecru.Print
   ( Print (..)
   , print
   , Options (..)
@@ -6,10 +6,10 @@ module Lang.Print
   )
 where
 
-import Lang.Literal as Literal (Literal (..))
-import Lang.Syntax as Syntax (Syntax (..))
-import Lang.Token as Token (Token (..))
-import Lang.Value as Value (Value (..))
+import Ecru.Literal as Literal (Literal (..))
+import Ecru.Syntax as Syntax (Syntax (..))
+import Ecru.Token as Token (Token (..))
+import Ecru.Value as Value (Value (..))
 import Prelude hiding (print)
 
 class Print a where

@@ -1,11 +1,11 @@
-module Lang.Eval
+module Ecru.Eval
   ( eval
   )
 where
 
-import Lang.Literal (Literal (..))
-import Lang.Syntax as Syntax (Syntax (..))
-import Lang.Value as Value (Value (..))
+import Ecru.Literal (Literal (..))
+import Ecru.Syntax as Syntax (Syntax (..))
+import Ecru.Value as Value (Value (..))
 
 eval :: Syntax -> Value
 eval = \case

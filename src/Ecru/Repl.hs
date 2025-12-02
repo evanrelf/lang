@@ -1,4 +1,4 @@
-module Lang.Repl
+module Ecru.Repl
   ( repl
   , replWithOptions
   , Options (..)
@@ -9,11 +9,11 @@ where
 import Data.String qualified as String
 import Data.Text qualified as Text
 import Data.Text.IO qualified as Text
-import Lang.Eval (eval)
-import Lang.Lex (lex)
-import Lang.Parse (parse)
-import Lang.Print (Print (..))
-import Lang.Print qualified as Print
+import Ecru.Eval (eval)
+import Ecru.Lex (lex)
+import Ecru.Parse (parse)
+import Ecru.Print (Print (..))
+import Ecru.Print qualified as Print
 import Optics
 import Prelude hiding (print)
 import System.Console.Repline hiding (Options)
@@ -29,8 +29,8 @@ replWithOptions options = liftIO do
 
   evalReplOpts ReplOpts
     { banner = \case
-        SingleLine -> pure "lang> "
-        MultiLine -> pure "lang| "
+        SingleLine -> pure "ecru> "
+        MultiLine -> pure "ecru| "
     , command = evalCommand optionsIORef
     , options =
         [ ("lex", lexCommand optionsIORef)

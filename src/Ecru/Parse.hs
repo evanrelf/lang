@@ -1,14 +1,14 @@
 {-# LANGUAGE ApplicativeDo #-}
 {-# LANGUAGE RecursiveDo #-}
 
-module Lang.Parse
+module Ecru.Parse
   ( parse
   )
 where
 
-import Lang.Literal as Literal (Literal (..))
-import Lang.Syntax (Syntax (..))
-import Lang.Token as Token (Token (..))
+import Ecru.Literal as Literal (Literal (..))
+import Ecru.Syntax (Syntax (..))
+import Ecru.Token as Token (Token (..))
 import Text.Earley qualified as E
 
 parse :: [Token] -> Either Text Syntax

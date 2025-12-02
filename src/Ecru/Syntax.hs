@@ -1,9 +1,9 @@
-module Lang.Syntax
+module Ecru.Syntax
   ( Syntax (..)
   )
 where
 
-import Lang.Literal (Literal (..))
+import Ecru.Literal (Literal (..))
 
 data Syntax
   = Literal Literal

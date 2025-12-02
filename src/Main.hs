@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Lang qualified
+import Ecru qualified
 
 main :: IO ()
-main = Lang.main
+main = Ecru.main

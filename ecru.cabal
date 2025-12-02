@@ -1,6 +1,6 @@
 cabal-version: 3.12
 
-name: lang
+name: ecru
 version: 0.0.0.0
 
 common common
@@ -48,20 +48,20 @@ library
     , pretty-simple
     , repline
   exposed-modules:
-    , Lang
-    , Lang.Eval
-    , Lang.Lex
-    , Lang.Literal
-    , Lang.Parse
-    , Lang.Print
-    , Lang.Repl
-    , Lang.Syntax
-    , Lang.Token
-    , Lang.Value
+    , Ecru
+    , Ecru.Eval
+    , Ecru.Lex
+    , Ecru.Literal
+    , Ecru.Parse
+    , Ecru.Print
+    , Ecru.Repl
+    , Ecru.Syntax
+    , Ecru.Token
+    , Ecru.Value
 
-executable lang
+executable ecru
   import:
     , common
     , executable
   main-is: src/Main.hs
-  build-depends: lang
+  build-depends: ecru

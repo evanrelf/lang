@@ -1,3 +1,3 @@
-# Lang
+# Ecru
 
 A programming language

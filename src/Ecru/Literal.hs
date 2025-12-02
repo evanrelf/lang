@@ -1,4 +1,4 @@
-module Lang.Literal
+module Ecru.Literal
   ( Literal (..)
   )
 where

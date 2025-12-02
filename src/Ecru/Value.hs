@@ -1,9 +1,9 @@
-module Lang.Value
+module Ecru.Value
   ( Value (..)
   )
 where
 
-import Lang.Literal (Literal (..))
+import Ecru.Literal (Literal (..))
 
 data Value
   = Literal Literal
