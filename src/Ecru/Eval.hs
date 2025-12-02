@@ -19,7 +19,7 @@ eval scope = \case
     case Map.lookup var scope of
       Just expr -> eval scope expr
       Nothing -> Value.Variable var
-  Syntax.Lambda param body -> Value.Lambda param (eval scope body)
+  Syntax.Lambda param body -> Value.Lambda param body
   Syntax.Application fn arg -> apply scope fn arg
 
 apply :: Map Text Syntax -> Syntax -> Syntax -> Value
