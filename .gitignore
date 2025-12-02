@@ -1,5 +1,11 @@
-result
-result-*
+# Cabal
 dist/
 dist-newstyle/
+cabal.project.local
+
+# Nix
+result
+result-*
+
+# Ecru
 .history
