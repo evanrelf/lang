@@ -11,7 +11,7 @@ import Text.Megaparsec qualified as M
 import Text.Megaparsec.Char qualified as M
 import Text.Megaparsec.Char.Lexer qualified as L
 
-type Parser = M.Parsec Void Text
+type Lexer = M.Parsec Void Text
 
 lex :: Text -> Either Text [Token]
 lex source =
@@ -19,10 +19,10 @@ lex source =
     Left err -> Left $ toText (M.errorBundlePretty err)
     Right tokens -> pure tokens
 
-tokensParser :: Parser [Token]
+tokensParser :: Lexer [Token]
 tokensParser = spaceParser *> M.manyTill tokenParser M.eof
 
-tokenParser :: Parser Token
+tokenParser :: Lexer Token
 tokenParser = asum
   [ Floating <$> M.try floatingParser
   , Integer <$> integerParser
@@ -32,7 +32,7 @@ tokenParser = asum
   , Colon <$ symbolParser ":"
   ]
 
-identifierParser :: Parser Text
+identifierParser :: Lexer Text
 identifierParser = lexemeParser do
   c <-
     M.satisfy \char -> or
@@ -50,17 +50,17 @@ identifierParser = lexemeParser do
 
   pure (c `Text.cons` cs)
 
-integerParser :: Parser Integer
+integerParser :: Lexer Integer
 integerParser = lexemeParser $ L.signed mempty L.decimal
 
-floatingParser :: Parser Double
+floatingParser :: Lexer Double
 floatingParser = lexemeParser $ L.signed mempty L.float
 
-lexemeParser :: Parser a -> Parser a
+lexemeParser :: Lexer a -> Lexer a
 lexemeParser = L.lexeme spaceParser
 
-symbolParser :: Text -> Parser Text
+symbolParser :: Text -> Lexer Text
 symbolParser = L.symbol spaceParser
 
-spaceParser :: Parser ()
+spaceParser :: Lexer ()
 spaceParser = L.space M.space1 (L.skipLineComment "#") empty
