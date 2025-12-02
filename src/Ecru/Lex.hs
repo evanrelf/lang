@@ -15,25 +15,25 @@ type Lexer = M.Parsec Void Text
 
 lex :: Text -> Either Text [Token]
 lex source =
-  case M.runParser tokensParser "" source of
+  case M.runParser tokens "" source of
     Left err -> Left $ toText (M.errorBundlePretty err)
-    Right tokens -> pure tokens
+    Right ts -> pure ts
 
-tokensParser :: Lexer [Token]
-tokensParser = spaceParser *> M.manyTill tokenParser M.eof
+tokens :: Lexer [Token]
+tokens = space *> M.manyTill token M.eof
 
-tokenParser :: Lexer Token
-tokenParser = asum
-  [ Floating <$> M.try floatingParser
-  , Integer <$> integerParser
-  , Identifier <$> identifierParser
-  , OpenParen <$ symbolParser "("
-  , CloseParen <$ symbolParser ")"
-  , Colon <$ symbolParser ":"
+token :: Lexer Token
+token = asum
+  [ Floating <$> M.try floating
+  , Integer <$> integer
+  , Identifier <$> identifier
+  , OpenParen <$ symbol "("
+  , CloseParen <$ symbol ")"
+  , Colon <$ symbol ":"
   ]
 
-identifierParser :: Lexer Text
-identifierParser = lexemeParser do
+identifier :: Lexer Text
+identifier = lexeme do
   c <-
     M.satisfy \char -> or
       [ Char.isAsciiLower char
@@ -50,17 +50,17 @@ identifierParser = lexemeParser do
 
   pure (c `Text.cons` cs)
 
-integerParser :: Lexer Integer
-integerParser = lexemeParser $ L.signed mempty L.decimal
+integer :: Lexer Integer
+integer = lexeme $ L.signed mempty L.decimal
 
-floatingParser :: Lexer Double
-floatingParser = lexemeParser $ L.signed mempty L.float
+floating :: Lexer Double
+floating = lexeme $ L.signed mempty L.float
 
-lexemeParser :: Lexer a -> Lexer a
-lexemeParser = L.lexeme spaceParser
+lexeme :: Lexer a -> Lexer a
+lexeme = L.lexeme space
 
-symbolParser :: Text -> Lexer Text
-symbolParser = L.symbol spaceParser
+symbol :: Text -> Lexer Text
+symbol = L.symbol space
 
-spaceParser :: Lexer ()
-spaceParser = L.space M.space1 (L.skipLineComment "#") empty
+space :: Lexer ()
+space = L.space M.space1 (L.skipLineComment "#") empty

@@ -23,47 +23,47 @@ grammar = mdo
 
   let inParens prod = E.token OpenParen *> prod <* E.token CloseParen
 
-  literalProd <- rule "literal" $ E.terminal \case
+  literal <- rule "literal" $ E.terminal \case
     Token.Integer int -> Just $ Literal (Literal.Integer int)
     Token.Floating float -> Just $ Literal (Literal.Floating float)
     _ -> Nothing
 
-  identifierProd <- rule "identifier" $ E.terminal \case
+  identifier <- rule "identifier" $ E.terminal \case
     Identifier name -> Just name
     _ -> Nothing
 
-  variableProd <- rule "variable" do
-    Variable <$> identifierProd
+  variable <- rule "variable" do
+    Variable <$> identifier
 
-  lambdaProd <- rule "lambda" do
-    Lambda <$> (identifierProd <* E.token Colon) <*> expressionProd
+  lambda <- rule "lambda" do
+    Lambda <$> (identifier <* E.token Colon) <*> expression
 
-  functionProd <- rule "application_function" $ asum
-    [ inParens lambdaProd
-    , inParens applicationProd
-    , applicationProd
-    , variableProd
-    , literalProd
-    , inParens argumentProd
+  function <- rule "application_function" $ asum
+    [ inParens lambda
+    , inParens application
+    , application
+    , variable
+    , literal
+    , inParens argument
     ]
 
-  argumentProd <- rule "application_argument" $ asum
-    [ inParens lambdaProd
-    , inParens applicationProd
-    , variableProd
-    , literalProd
-    , inParens argumentProd
+  argument <- rule "application_argument" $ asum
+    [ inParens lambda
+    , inParens application
+    , variable
+    , literal
+    , inParens argument
     ]
 
-  applicationProd <- rule "application" do
-    Application <$> functionProd <*> argumentProd
+  application <- rule "application" do
+    Application <$> function <*> argument
 
-  expressionProd <- rule "expression" $ asum
-    [ lambdaProd
-    , applicationProd
-    , variableProd
-    , literalProd
-    , inParens expressionProd
+  expression <- rule "expression" $ asum
+    [ lambda
+    , application
+    , variable
+    , literal
+    , inParens expression
     ]
 
-  pure expressionProd
+  pure expression
