@@ -87,7 +87,7 @@ instance Print Value where
 data Options = Options
   { extraParens :: Bool
   }
-  deriving stock (Generic, Show)
+  deriving stock (Generic)
 
 defaultOptions :: Options
 defaultOptions = Options

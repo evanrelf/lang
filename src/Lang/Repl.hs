@@ -112,7 +112,7 @@ helpCommand optionsIORef arguments = do
 data Options = Options
   { printer :: Printer.Options
   }
-  deriving stock (Generic, Show)
+  deriving stock (Generic)
 
 defaultOptions :: Options
 defaultOptions = Options
