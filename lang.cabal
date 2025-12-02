@@ -49,11 +49,11 @@ library
     , repline
   exposed-modules:
     , Lang
-    , Lang.Evaluator
-    , Lang.Lexer
+    , Lang.Eval
+    , Lang.Lex
     , Lang.Literal
-    , Lang.Parser
-    , Lang.Printer
+    , Lang.Parse
+    , Lang.Print
     , Lang.Repl
     , Lang.Syntax
     , Lang.Token

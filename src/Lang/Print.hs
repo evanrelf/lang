@@ -1,4 +1,4 @@
-module Lang.Printer
+module Lang.Print
   ( Print (..)
   , print
   , Options (..)

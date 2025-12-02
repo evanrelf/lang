@@ -1,5 +1,5 @@
-module Lang.Evaluator
-  ( evaluate
+module Lang.Eval
+  ( eval
   )
 where
 
@@ -7,16 +7,16 @@ import Lang.Literal (Literal (..))
 import Lang.Syntax as Syntax (Syntax (..))
 import Lang.Value as Value (Value (..))
 
-evaluate :: Syntax -> Value
-evaluate = \case
+eval :: Syntax -> Value
+eval = \case
   Syntax.Literal literal -> Value.Literal literal
   Syntax.Variable name -> Value.Variable name
   Syntax.Lambda parameter body ->
-    Value.Lambda parameter (evaluate body)
+    Value.Lambda parameter (eval body)
   -- Identity function
   Syntax.Application
     (Syntax.Lambda parameter (Syntax.Variable name))
-    argument | parameter == name -> evaluate argument
+    argument | parameter == name -> eval argument
   -- Add integers
   Syntax.Application
     (Syntax.Application
@@ -30,4 +30,4 @@ evaluate = \case
       (Syntax.Literal (Floating x)))
     (Syntax.Literal (Floating y)) -> Value.Literal (Floating (x + y))
   Syntax.Application function argument ->
-    Value.Application (evaluate function) (evaluate argument)
+    Value.Application (eval function) (eval argument)

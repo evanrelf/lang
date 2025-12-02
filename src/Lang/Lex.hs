@@ -1,4 +1,4 @@
-module Lang.Lexer
+module Lang.Lex
   ( Token (..)
   , lex
   )

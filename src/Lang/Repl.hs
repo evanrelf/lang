@@ -9,11 +9,11 @@ where
 import Data.String qualified as String
 import Data.Text qualified as Text
 import Data.Text.IO qualified as Text
-import Lang.Evaluator (evaluate)
-import Lang.Lexer (lex)
-import Lang.Parser (parse)
-import Lang.Printer (Print (..))
-import Lang.Printer qualified as Printer
+import Lang.Eval (eval)
+import Lang.Lex (lex)
+import Lang.Parse (parse)
+import Lang.Print (Print (..))
+import Lang.Print qualified as Print
 import Optics
 import Prelude hiding (print)
 import System.Console.Repline hiding (Options)
@@ -72,7 +72,7 @@ evalCommand :: IORef Options -> String -> Repl ()
 evalCommand optionsIORef source = do
   Options{printer} <- readIORef optionsIORef
 
-  case lex (toText source) >>= parse <&> evaluate of
+  case lex (toText source) >>= parse <&> eval of
     Left err -> liftIO $ Text.hPutStrLn IO.stderr err
     Right value -> putTextLn $ printWithOptions printer value
 
@@ -112,11 +112,11 @@ helpCommand optionsIORef arguments = do
     _ -> liftIO $ Text.hPutStrLn IO.stderr "Invalid argument(s)"
 
 data Options = Options
-  { printer :: Printer.Options
+  { printer :: Print.Options
   }
   deriving stock (Generic)
 
 defaultOptions :: Options
 defaultOptions = Options
-  { printer = Printer.defaultOptions
+  { printer = Print.defaultOptions
   }

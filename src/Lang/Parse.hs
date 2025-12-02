@@ -1,7 +1,7 @@
 {-# LANGUAGE ApplicativeDo #-}
 {-# LANGUAGE RecursiveDo #-}
 
-module Lang.Parser
+module Lang.Parse
   ( parse
   )
 where
