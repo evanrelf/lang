@@ -19,22 +19,22 @@ eval scope = \case
       Just val -> val
       Nothing -> Value.Variable var
   Syntax.Lambda param body -> Value.Lambda param body
-  Syntax.Application fn arg -> apply scope fn arg
+  Syntax.Application fn arg -> apply scope (eval scope fn) (eval scope arg)
 
-apply :: Map Text Value -> Syntax -> Syntax -> Value
+apply :: Map Text Value -> Value -> Value -> Value
 apply scope = \cases
-  (Syntax.Lambda param body) arg ->
-    eval (fix \final -> Map.insert param (eval final arg) scope) body
+  (Value.Lambda param body) arg ->
+    eval (Map.insert param arg scope) body
 
   -- Add integers
-  (Syntax.Application (Syntax.Variable "add") (Syntax.Literal (Integer x)))
-    (Syntax.Literal (Integer y)) -> Value.Literal (Integer (x + y))
+  (Value.Application (Value.Variable "add") (Value.Literal (Integer x)))
+    (Value.Literal (Integer y)) -> Value.Literal (Integer (x + y))
 
   -- Add floats
-  (Syntax.Application (Syntax.Variable "add") (Syntax.Literal (Floating x)))
-    (Syntax.Literal (Floating y)) -> Value.Literal (Floating (x + y))
+  (Value.Application (Value.Variable "add") (Value.Literal (Floating x)))
+    (Value.Literal (Floating y)) -> Value.Literal (Floating (x + y))
 
-  fn arg -> Value.Application (eval scope fn) (eval scope arg)
+  fn arg -> Value.Application fn arg
 
 prelude :: Map Text Value
 prelude = Map.fromList
