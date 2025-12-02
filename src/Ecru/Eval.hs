@@ -15,7 +15,10 @@ import Ecru.Value as Value (Value (..))
 eval :: Map Text Syntax -> Syntax -> Value
 eval scope = \case
   Syntax.Literal lit -> Value.Literal lit
-  Syntax.Variable var -> Value.Variable var
+  Syntax.Variable var ->
+    case Map.lookup var scope of
+      Just expr -> eval scope expr
+      Nothing -> Value.Variable var
   Syntax.Lambda param body -> Value.Lambda param (eval scope body)
   Syntax.Application fn arg -> apply scope fn arg
 
