@@ -1,4 +1,4 @@
-cabal-version: 2.2
+cabal-version: 3.12
 
 name: lang
 version: 0.1.0.0
@@ -13,10 +13,10 @@ common common
     , relude
   default-language: GHC2024
   default-extensions:
-    BlockArguments
-    OverloadedLabels
-    OverloadedStrings
-    ViewPatterns
+    , BlockArguments
+    , OverloadedLabels
+    , OverloadedStrings
+    , ViewPatterns
   ghc-options:
     -Wall
     -Wcompat
@@ -48,16 +48,16 @@ library
     , pretty-simple
     , repline
   exposed-modules:
-    Lang
-    Lang.Evaluator
-    Lang.Lexer
-    Lang.Literal
-    Lang.Parser
-    Lang.Printer
-    Lang.Repl
-    Lang.Syntax
-    Lang.Token
-    Lang.Value
+    , Lang
+    , Lang.Evaluator
+    , Lang.Lexer
+    , Lang.Literal
+    , Lang.Parser
+    , Lang.Printer
+    , Lang.Repl
+    , Lang.Syntax
+    , Lang.Token
+    , Lang.Value
 
 executable lang
   import:
