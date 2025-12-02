@@ -46,6 +46,7 @@ prelude :: Map Text Value
 prelude = Map.fromList
   [ ("identity", expr "x: x")
   , ("const", expr "x: _: x")
+  , ("flip", expr "f: x: y: f y x")
   ]
   where
   expr :: Text -> Value
