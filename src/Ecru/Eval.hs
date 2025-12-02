@@ -30,12 +30,12 @@ apply = \cases
     eval (Map.insert param arg scope) body
 
   -- TODO: Check types of `t` and `f` match
-  (Value.Application (Value.Application (Value.Variable "if") p) t) f ->
+  (Value.Application (Value.Application (Value.Variable "builtin/if") p) t) f ->
     case p of
       Value.Literal (Boolean p') -> Right $ if p' then t else f
       _ -> Left "error: arguments to `if` not valid"
 
-  (Value.Application (Value.Variable "eq") x) y ->
+  (Value.Application (Value.Variable "builtin/eq") x) y ->
     case (x, y) of
       (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
         Right $ Value.Literal (Boolean (x' == y'))
@@ -48,7 +48,7 @@ apply = \cases
       _ ->
         Left "error: arguments to `eq` not valid"
 
-  (Value.Application (Value.Variable "add") x) y ->
+  (Value.Application (Value.Variable "builtin/add") x) y ->
     case (x, y) of
       (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
         Right $ Value.Literal (Integer (x' + y'))
@@ -59,7 +59,7 @@ apply = \cases
       _ ->
         Left "error: arguments to `add` not valid"
 
-  (Value.Application (Value.Variable "sub") x) y ->
+  (Value.Application (Value.Variable "builtin/sub") x) y ->
     case (x, y) of
       (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
         Right $ Value.Literal (Integer (x' - y'))
@@ -70,7 +70,7 @@ apply = \cases
       _ ->
         Left "error: arguments to `sub` not valid"
 
-  (Value.Application (Value.Variable "mul") x) y ->
+  (Value.Application (Value.Variable "builtin/mul") x) y ->
     case (x, y) of
       (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
         Right $ Value.Literal (Integer (x' * y'))
@@ -81,7 +81,7 @@ apply = \cases
       _ ->
         Left "error: arguments to `mul` not valid"
 
-  (Value.Application (Value.Variable "div") x) y ->
+  (Value.Application (Value.Variable "builtin/div") x) y ->
     case (x, y) of
       (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
         Right $ Value.Literal (Integer (x' `div` y'))
@@ -94,12 +94,17 @@ apply = \cases
 
   fn arg -> Right $ Value.Application fn arg
 
--- TODO: Make e.g. `eq` prelude function map to `@eq` builtin
 prelude :: Map Text Value
 prelude = Map.fromList
   [ ("identity", expr "x: x")
   , ("const", expr "x: _: x")
   , ("flip", expr "f: x: y: f y x")
+  , ("if", Value.Variable "builtin/if")
+  , ("eq", Value.Variable "builtin/eq")
+  , ("add", Value.Variable "builtin/add")
+  , ("sub", Value.Variable "builtin/sub")
+  , ("mul", Value.Variable "builtin/mul")
+  , ("div", Value.Variable "builtin/div")
   , ("True", Value.Literal (Boolean True))
   , ("False", Value.Literal (Boolean False))
   ]
