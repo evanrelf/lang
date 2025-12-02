@@ -9,10 +9,10 @@ import Ecru.Value as Value (Value (..))
 
 eval :: Syntax -> Value
 eval = \case
-  Syntax.Literal literal -> Value.Literal literal
-  Syntax.Variable name -> Value.Variable name
-  Syntax.Lambda parameter body -> Value.Lambda parameter (eval body)
-  Syntax.Application function argument -> apply function argument
+  Syntax.Literal lit -> Value.Literal lit
+  Syntax.Variable var -> Value.Variable var
+  Syntax.Lambda param body -> Value.Lambda param (eval body)
+  Syntax.Application fn arg -> apply fn arg
 
 apply :: Syntax -> Syntax -> Value
 apply = \cases
