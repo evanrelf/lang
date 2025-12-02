@@ -72,7 +72,7 @@ evalCommand :: IORef Options -> String -> Repl ()
 evalCommand optionsIORef source = do
   Options{printer} <- readIORef optionsIORef
 
-  case lex (toText source) >>= parse <&> eval prelude of
+  case lex (toText source) >>= parse >>= eval prelude of
     Left err -> liftIO $ Text.hPutStrLn IO.stderr err
     Right value -> putTextLn $ printWithOptions printer value
 

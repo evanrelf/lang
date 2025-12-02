@@ -11,30 +11,33 @@ import Ecru.Parse (parse)
 import Ecru.Syntax as Syntax (Syntax (..))
 import Ecru.Value as Value (Value (..))
 
-eval :: Map Text Value -> Syntax -> Value
+eval :: Map Text Value -> Syntax -> Either Text Value
 eval scope = \case
-  Syntax.Literal lit -> Value.Literal lit
+  Syntax.Literal lit -> Right $ Value.Literal lit
   Syntax.Variable var ->
     case Map.lookup var scope of
-      Just val -> val
-      Nothing -> Value.Variable var
-  Syntax.Lambda param body -> Value.Lambda scope param body
-  Syntax.Application fn arg -> apply (eval scope fn) (eval scope arg)
+      Just val -> Right val
+      Nothing -> Right $ Value.Variable var
+  Syntax.Lambda param body -> Right $ Value.Lambda scope param body
+  Syntax.Application fn arg -> do
+    fn' <- eval scope fn
+    arg' <- eval scope arg
+    apply fn' arg'
 
-apply :: Value -> Value -> Value
+apply :: Value -> Value -> Either Text Value
 apply = \cases
   (Value.Lambda scope param body) arg ->
     eval (Map.insert param arg scope) body
 
   -- Add integers
   (Value.Application (Value.Variable "add") (Value.Literal (Integer x)))
-    (Value.Literal (Integer y)) -> Value.Literal (Integer (x + y))
+    (Value.Literal (Integer y)) -> Right $ Value.Literal (Integer (x + y))
 
   -- Add floats
   (Value.Application (Value.Variable "add") (Value.Literal (Floating x)))
-    (Value.Literal (Floating y)) -> Value.Literal (Floating (x + y))
+    (Value.Literal (Floating y)) -> Right $ Value.Literal (Floating (x + y))
 
-  fn arg -> Value.Application fn arg
+  fn arg -> Right $ Value.Application fn arg
 
 prelude :: Map Text Value
 prelude = Map.fromList
@@ -43,7 +46,4 @@ prelude = Map.fromList
   ]
   where
   expr :: Text -> Value
-  expr = eval prelude . boldly parse . boldly lex
-
-  boldly :: (a -> Either Text b) -> (a -> b)
-  boldly f = either error identity . f
+  expr = either error identity . (lex >=> parse >=> eval prelude)
