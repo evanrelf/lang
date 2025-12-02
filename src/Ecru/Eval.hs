@@ -45,7 +45,7 @@ apply = \cases
         Right $ Value.Literal (Boolean (x' == y'))
       (Value.Literal _, Value.Literal _) ->
         Left "error: arguments to `eq` not the same type"
-      (_, _) ->
+      _ ->
         Left "error: arguments to `eq` not valid"
 
   (Value.Application (Value.Variable "add") x) y ->
@@ -56,8 +56,41 @@ apply = \cases
         Right $ Value.Literal (Floating (x' + y'))
       (Value.Literal _, Value.Literal _) ->
         Left "error: arguments to `add` not the same type"
-      (_, _) ->
+      _ ->
         Left "error: arguments to `add` not valid"
+
+  (Value.Application (Value.Variable "sub") x) y ->
+    case (x, y) of
+      (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
+        Right $ Value.Literal (Integer (x' - y'))
+      (Value.Literal (Floating x'), Value.Literal (Floating y')) ->
+        Right $ Value.Literal (Floating (x' - y'))
+      (Value.Literal _, Value.Literal _) ->
+        Left "error: arguments to `sub` not the same type"
+      _ ->
+        Left "error: arguments to `sub` not valid"
+
+  (Value.Application (Value.Variable "mul") x) y ->
+    case (x, y) of
+      (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
+        Right $ Value.Literal (Integer (x' * y'))
+      (Value.Literal (Floating x'), Value.Literal (Floating y')) ->
+        Right $ Value.Literal (Floating (x' * y'))
+      (Value.Literal _, Value.Literal _) ->
+        Left "error: arguments to `mul` not the same type"
+      _ ->
+        Left "error: arguments to `mul` not valid"
+
+  (Value.Application (Value.Variable "div") x) y ->
+    case (x, y) of
+      (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
+        Right $ Value.Literal (Integer (x' `div` y'))
+      (Value.Literal (Floating x'), Value.Literal (Floating y')) ->
+        Right $ Value.Literal (Floating (x' / y'))
+      (Value.Literal _, Value.Literal _) ->
+        Left "error: arguments to `div` not the same type"
+      _ ->
+        Left "error: arguments to `div` not valid"
 
   fn arg -> Right $ Value.Application fn arg
 
