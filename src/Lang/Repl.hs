@@ -28,7 +28,9 @@ replWithOptions options = liftIO do
   optionsIORef <- newIORef options
 
   evalReplOpts ReplOpts
-    { banner = \_ -> pure "lang> "
+    { banner = \case
+        SingleLine -> pure "lang> "
+        MultiLine -> pure "lang| "
     , command = evalCommand optionsIORef
     , options =
         [ ("lex", lexCommand optionsIORef)
