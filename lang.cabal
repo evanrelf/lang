@@ -11,11 +11,9 @@ common common
     , base hiding (Prelude)
     , relude (Relude as Prelude)
     , relude
-  default-language: GHC2021
+  default-language: GHC2024
   default-extensions:
     BlockArguments
-    DerivingStrategies
-    LambdaCase
     OverloadedLabels
     OverloadedStrings
     ViewPatterns
