@@ -66,7 +66,7 @@ instance Print Value where
   printWithOptions options@Options{extraParens} = \case
     Value.Literal literal -> printWithOptions options literal
     Value.Variable name -> name
-    Value.Lambda parameter body ->
+    Value.Lambda _scope parameter body ->
       parameter <> ": " <> printWithOptions options body
     Value.Application function argument -> do
       let f = do

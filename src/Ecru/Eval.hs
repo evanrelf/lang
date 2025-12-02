@@ -18,12 +18,12 @@ eval scope = \case
     case Map.lookup var scope of
       Just val -> val
       Nothing -> Value.Variable var
-  Syntax.Lambda param body -> Value.Lambda param body
-  Syntax.Application fn arg -> apply scope (eval scope fn) (eval scope arg)
+  Syntax.Lambda param body -> Value.Lambda scope param body
+  Syntax.Application fn arg -> apply (eval scope fn) (eval scope arg)
 
-apply :: Map Text Value -> Value -> Value -> Value
-apply scope = \cases
-  (Value.Lambda param body) arg ->
+apply :: Value -> Value -> Value
+apply = \cases
+  (Value.Lambda scope param body) arg ->
     eval (Map.insert param arg scope) body
 
   -- Add integers

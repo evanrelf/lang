@@ -9,6 +9,6 @@ import Ecru.Syntax (Syntax (..))
 data Value
   = Literal Literal
   | Variable Text
-  | Lambda Text Syntax
+  | Lambda (Map Text Value) Text Syntax
   | Application Value Value
   deriving stock (Show)
