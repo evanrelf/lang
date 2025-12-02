@@ -29,6 +29,12 @@ apply = \cases
   (Value.Lambda scope param body) arg ->
     eval (Map.insert param arg scope) body
 
+  -- TODO: Check types of `t` and `f` match
+  (Value.Application (Value.Application (Value.Variable "if") p) t) f ->
+    case p of
+      Value.Literal (Boolean p') -> Right $ if p' then t else f
+      _ -> Left "error: arguments to `if` not valid"
+
   (Value.Application (Value.Variable "eq") x) y ->
     case (x, y) of
       (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
@@ -55,6 +61,7 @@ apply = \cases
 
   fn arg -> Right $ Value.Application fn arg
 
+-- TODO: Make e.g. `eq` prelude function map to `@eq` builtin
 prelude :: Map Text Value
 prelude = Map.fromList
   [ ("identity", expr "x: x")
