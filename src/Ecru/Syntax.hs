@@ -3,6 +3,7 @@ module Ecru.Syntax
   )
 where
 
+import Data.Data (Data)
 import Ecru.Literal (Literal (..))
 
 data Syntax
@@ -10,4 +11,4 @@ data Syntax
   | Variable Text
   | Lambda Text Syntax
   | Application Syntax Syntax
-  deriving stock (Show)
+  deriving stock (Data, Show)

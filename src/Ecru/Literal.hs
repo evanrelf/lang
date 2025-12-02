@@ -3,7 +3,9 @@ module Ecru.Literal
   )
 where
 
+import Data.Data (Data)
+
 data Literal
   = Integer Integer
   | Floating Double
-  deriving stock (Show)
+  deriving stock (Data, Show)

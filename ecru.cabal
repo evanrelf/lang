@@ -47,6 +47,7 @@ library
     , optics
     , pretty-simple
     , repline
+    , template-haskell
   exposed-modules:
     , Ecru
     , Ecru.Eval
@@ -54,6 +55,7 @@ library
     , Ecru.Literal
     , Ecru.Parse
     , Ecru.Print
+    , Ecru.QuasiQuoters
     , Ecru.Repl
     , Ecru.Syntax
     , Ecru.Token

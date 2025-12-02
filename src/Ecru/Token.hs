@@ -3,6 +3,8 @@ module Ecru.Token
   )
 where
 
+import Data.Data (Data)
+
 data Token
   = Integer Integer
   | Floating Double
@@ -10,4 +12,4 @@ data Token
   | OpenParen
   | CloseParen
   | Colon
-  deriving stock (Eq, Show)
+  deriving stock (Data, Eq, Show)
