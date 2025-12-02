@@ -6,6 +6,7 @@ module Ecru.Repl
   )
 where
 
+import Data.Map.Strict qualified as Map
 import Data.String qualified as String
 import Data.Text qualified as Text
 import Data.Text.IO qualified as Text
@@ -41,7 +42,7 @@ replWithOptions options = liftIO do
         ]
     , prefix = Just ':'
     , multilineCommand = Nothing
-    , tabComplete = File
+    , tabComplete = Word0 (listWordCompleter (fmap toString (Map.keys prelude)))
     , initialiser = pure ()
     , finaliser = pure Exit
     }
