@@ -37,6 +37,7 @@ identifier = lexeme do
   c <-
     M.satisfy \char -> or
       [ Char.isAsciiLower char
+      , Char.isAsciiUpper char
       , char == '_'
       ]
 

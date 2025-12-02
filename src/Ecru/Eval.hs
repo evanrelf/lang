@@ -29,6 +29,19 @@ apply = \cases
   (Value.Lambda scope param body) arg ->
     eval (Map.insert param arg scope) body
 
+  (Value.Application (Value.Variable "eq") x) y ->
+    case (x, y) of
+      (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
+        Right $ Value.Literal (Boolean (x' == y'))
+      (Value.Literal (Floating x'), Value.Literal (Floating y')) ->
+        Right $ Value.Literal (Boolean (x' == y'))
+      (Value.Literal (Boolean x'), Value.Literal (Boolean y')) ->
+        Right $ Value.Literal (Boolean (x' == y'))
+      (Value.Literal _, Value.Literal _) ->
+        Left "error: arguments to `eq` not the same type"
+      (_, _) ->
+        Left "error: arguments to `eq` not valid"
+
   (Value.Application (Value.Variable "add") x) y ->
     case (x, y) of
       (Value.Literal (Integer x'), Value.Literal (Integer y')) ->
@@ -47,6 +60,8 @@ prelude = Map.fromList
   [ ("identity", expr "x: x")
   , ("const", expr "x: _: x")
   , ("flip", expr "f: x: y: f y x")
+  , ("True", Value.Literal (Boolean True))
+  , ("False", Value.Literal (Boolean False))
   ]
   where
   expr :: Text -> Value

@@ -35,8 +35,9 @@ instance Print [Token] where
 instance Print Literal where
   printWithOptions :: Options -> Literal -> Text
   printWithOptions _ = \case
-    Literal.Integer int -> show int
-    Literal.Floating float -> show float
+    Literal.Integer x -> show x
+    Literal.Floating x -> show x
+    Literal.Boolean x -> show x
 
 instance Print Syntax where
   printWithOptions :: Options -> Syntax -> Text
